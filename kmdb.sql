@@ -104,14 +104,66 @@
 .headers off
 
 -- Drop existing tables, so you'll start fresh each time this script is run.
--- TODO!
+DROP TABLE IF EXISTS batman;
+DROP TABLE IF EXISTS studio_list;
+DROP TABLE IF EXISTS cast_list;
 
 -- Create new tables, according to your domain model
--- TODO!
+
+CREATE TABLE batman (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  movie_title TEXT,
+  year INTEGER,
+  rating INTEGER,
+  studio TEXT
+);
+
+CREATE TABLE studio_list (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    studio TEXT,
+    batman_id INTEGER
+);
+
+CREATE TABLE cast_list (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batman_id INTEGER,
+    name TEXT,
+    cast_character_name TEXT
+);
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
--- TODO!
+
+INSERT INTO batman (movie_title, year, rating, studio)
+VALUES 
+('Batman Begins', '2005', 'PG-13', 'Warner Bros'),
+('The Dark Knight', '2008', 'PG-13','Warner Bros'),
+('The Dark Knight Rises', '2012', 'PG-13','Warner Bros');
+
+INSERT INTO studio_list (studio, batman_id)
+VALUES
+('Warner Bros', 1),
+('Warner Bros', 2),
+('Warner Bros', 3);
+
+INSERT INTO cast_list(batman_id, name, cast_character_name)
+VALUES
+(1, 'Christian Bale', 'Bruce Wayne'),
+(1, 'Michael Caine', 'Alfred'),
+(1, 'Liam Neeson', "Ra's Al Ghul"),
+(1, 'Katie Holmes', 'Rachel Dawes'),
+(1, 'Gary Oldman', 'Commissioner Gordon'),
+(2, 'Christian Bale', 'Bruce Wayne'),
+(2, 'Heath Ledger', 'Joker'),
+(2, 'Aaron Eckhart', 'Harvey Dent'),
+(2, 'Michael Caine', 'Alfred'),
+(2, 'Maggie Gyllenhaal', 'Rachel Dawes'),
+(3, 'Christian Bale', 'Bruce Wayne'),
+(3, 'Gary Oldman', 'Commissioner Gordon'),
+(3, 'Tom Hardy', 'Bane'),
+(3, 'Joseph Gordon-Levitt', 'John Blake'),
+(3, 'Anne Hathaway', 'Selina Kyle');
+
 
 -- Prints a header for the movies output
 .print "Movies"
@@ -119,7 +171,7 @@
 .print ""
 
 -- The SQL statement for the movies output
--- TODO!
+SELECT * FROM batman;
 
 -- Prints a header for the cast output
 .print ""
@@ -129,4 +181,5 @@
 
 
 -- The SQL statement for the cast output
--- TODO!
+SELECT batman.movie_title, cast_list.name, cast_list.cast_character_name 
+FROM batman INNER JOIN cast_list ON batman.id = cast_list.batman_id;
